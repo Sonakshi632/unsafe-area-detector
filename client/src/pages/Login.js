@@ -10,14 +10,15 @@ function Login() {
     password: "",
   });
 
- const handleLogin = async () => {
-  const res = await API.post("/auth/login", form);
-
-  // ✅ ADD THIS LINE (MOST IMPORTANT)
-  localStorage.setItem("token", res.data.token);
-
-  navigate("/dashboard");
-};
+  const handleLogin = async () => {
+    try {
+      const res = await API.post("/auth/login", form);
+      localStorage.setItem("token", res.data.token);
+      navigate("/dashboard");
+    } catch (err) {
+      alert(err.response?.data?.error || "Login failed");
+    }
+  };
 
   return (
     <div style={{
@@ -35,18 +36,18 @@ function Login() {
         width: "320px",
         border: "1px solid rgba(255,255,255,0.1)"
       }}>
-        <h2 style={{ marginBottom: "20px" }}>Login 🔐</h2>
+        <h2 style={{ marginBottom: "20px", color: "#fff" }}>Login 🔐</h2>
 
         <input
           placeholder="Email"
-          style={{ width: "100%", margin: "10px 0", padding: "10px" }}
+          style={{ width: "100%", margin: "10px 0", padding: "10px", borderRadius: "8px", border: "none" }}
           onChange={(e) => setForm({ ...form, email: e.target.value })}
         />
 
         <input
           placeholder="Password"
           type="password"
-          style={{ width: "100%", margin: "10px 0", padding: "10px" }}
+          style={{ width: "100%", margin: "10px 0", padding: "10px", borderRadius: "8px", border: "none" }}
           onChange={(e) => setForm({ ...form, password: e.target.value })}
         />
 
@@ -60,11 +61,24 @@ function Login() {
             borderRadius: "10px",
             color: "#fff",
             marginTop: "10px",
-            cursor: "pointer"
+            cursor: "pointer",
+            fontSize: "16px"
           }}
         >
           Login
         </button>
+
+        {/* ← REGISTER LINK ADD KIYA */}
+        <p style={{ color: "#aaa", marginTop: "15px", textAlign: "center" }}>
+          New user?{" "}
+          <span
+            onClick={() => navigate("/register")}
+            style={{ color: "#22c55e", cursor: "pointer" }}
+          >
+            Register here
+          </span>
+        </p>
+
       </div>
     </div>
   );
